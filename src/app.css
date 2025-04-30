@@ -1,0 +1,438 @@
+.chatBg {
+    position: fixed;
+    width:400px;
+    height:540px;
+    box-sizing: border-box;
+    background: url('./assets/chatBg.png') no-repeat center center;
+    background-size: cover;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -270px;
+    box-shadow: 0px 5px 22px 0px rgba(199,199,199,0.25);
+    border-radius: 12px 12px 12px 12px;
+    .chatBgNei {
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* 使容器占据整个视口高度 */
+        margin: 0;
+        padding: 0;
+    }
+    .chatTopFix {
+        padding:18px 16px 0 14px;
+        .chatTopFixTitle {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .chatTopLeft {
+                font-family: PingFang SC, PingFang SC;
+                font-weight: bold;
+                font-size: 20px;
+                color: #262B4F;
+                line-height: 23px;
+                text-align: left;
+                font-style: normal;
+                text-transform: none;
+            }
+            .chatTopRight {
+                img{
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+        .line {
+            width: 100%;
+            height: 0;
+            border: 1px solid rgba(255,255,255,0.48);
+            margin-top: 18px;
+        }
+    }
+    .mainScroll {
+        margin-top: 16px;
+        flex: 1; /* 占据剩余所有空间 */
+        overflow-y: auto; /* 允许垂直滚动 */
+        padding: 0 20px 20px 20px;
+        /* 自定义滚动条（兼容现代浏览器） */
+        scrollbar-width: thin;
+        scrollbar-color: #C8C8C8 transparent;
+        .message {
+            font-family: PingFang SC, PingFang SC;
+            font-weight: 400;
+            font-size: 12px;
+            color: #626B76;
+            text-align: left;
+            font-style: normal;
+            text-transform: none;
+            margin-top: 8px;
+            .content{
+                width: 272px;
+                margin: 0 auto;
+            }
+        }
+        .time {
+            margin: 0 auto;
+            width: 62px;
+            height: 24px;
+            background-image: url('./assets/time.png');
+            background-size: cover;
+            font-family: Source Han Sans SC, Source Han Sans SC;
+            font-size: 14px;
+            text-align: center;
+            line-height: 24px;
+            color: #7D8592;
+            font-style: normal;
+            text-transform: none;
+        }
+        .chatT {
+            position: relative;
+            width: 272px;
+            height: auto;
+            margin: 0 auto;
+            padding-top: 12px;
+            .chatTImg {
+                position: absolute;
+                left: -44px;
+                top: 12px;
+                width: 36px;
+                height: 36px;
+
+            }
+            .chatTitle {
+                position: static;
+                width: 100%;
+                font-family: PingFang SC, PingFang SC;
+                font-size: 13px;
+                color: #162445;
+                line-height: 15px;
+                text-align: left;
+                font-style: normal;
+                text-transform: none;
+            }
+            .chatTContent {
+                position: static;
+                width: auto;
+                height: auto;
+                background: #FFFFFF;
+                border-radius: 0px 4px 4px 16px;
+                font-family: PingFang SC, PingFang SC;
+                font-size: 12px;
+                color: #262B4F;
+                line-height: 18px;
+                text-align: left;
+                font-style: normal;
+                text-transform: none;
+                box-sizing: border-box;
+                padding: 8px 8px 8px 20px;
+                display: inline-block;
+
+            }
+        }
+        .guessAsk {
+            width: 292px;
+            height: 215px;
+            background: #FFFFFF;
+            box-shadow: 0px 10px 23px 0px rgba(223,233,244,0.56);
+            border-radius: 4px 4px 4px 4px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            padding: 12px 12px 0 12px;
+            margin-top: 12px;
+            .guessAskTop{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding-bottom: 12px;
+                img {
+                    width: 14px;
+                    height: 14px;
+                }
+                .guessAskLeft{
+                    width: 80px;
+                    img{float: left;margin-right: 4px}
+                    .name{
+                        font-family: PingFang SC, PingFang SC;
+                        font-size: 12px;
+                        color: #333333;
+                        line-height: 14px;
+                        text-align: left;
+                        font-style: normal;
+                        text-transform: none;
+                    }
+                }
+                .guessAskRight {
+                    float:left;
+                    img{margin-right: 4px;float: right}
+                    .name {
+                        width: 32px;
+                        cursor: pointer;
+                        float: right;
+                        height: 14px;
+                        font-family: PingFang SC, PingFang SC;
+                        font-size: 10px;
+                        color: #262B4F;
+                        line-height: 14px;
+                        text-align: left;
+                        font-style: normal;
+                        text-transform: none;
+                    }
+                }
+            }
+            .guessAskList{
+                li {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    width: 100%;
+                    height: 37px;
+                    background: #FBFBFB;
+                    border-radius: 4px 4px 4px 4px;
+                    margin-bottom: 5px;
+                    align-items: center;
+                    padding:0 8px;
+                    box-sizing: border-box;
+                    .guessAskListContent {
+                        width: 236px;
+                        height: 17px;
+                        font-family: PingFang SC, PingFang SC;
+                        font-size: 12px;
+                        color: #262B4F;
+                        line-height: 18px;
+                        text-align: left;
+                        font-style: normal;
+                        text-transform: none;
+
+                    }
+                    img{
+                        width: 16px;
+                        height: 16px;
+                    }
+                }
+            }
+            .error-message{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                height: 164px;
+                img{
+                    width: 12px;
+                    height: 12px;
+                    margin-right: 2px;
+                }
+                span{
+                    width: auto;
+                    height: 14px;
+                    font-family: PingFang SC, PingFang SC;
+                    font-weight: 400;
+                    font-size: 10px;
+                    color: #9E9E9E;
+                    text-align: left;
+                    font-style: normal;
+                    text-transform: none;
+                }
+            }
+        }
+        .askAi {
+            position: relative;
+            width: 272px;
+            height: 88px;
+            margin: 0 auto;
+            padding-top: 12px;
+            .askAiIcon {
+                position: absolute;
+                right: -44px;
+                top: 12px;
+                width: 36px;
+                height: 36px;
+
+            }
+            .askAiTitle {
+                position: static;
+                width: 100%;
+                font-family: PingFang SC, PingFang SC;
+                font-size: 13px;
+                color: #162445;
+                line-height: 15px;
+                text-align: right;
+                font-style: normal;
+                text-transform: none;
+                margin-bottom: 4px;
+            }
+            .askAiContent {
+                position: static;
+                width: auto;
+                height: auto;
+                padding: 8px 20px 8px 8px;
+                box-sizing: border-box;
+                background: #EAEFF5;
+                border-radius: 4px 0px 16px 4px;
+
+
+                font-family: PingFang SC, PingFang SC;
+                font-size: 12px;
+                color: #262B4F;
+                line-height: 14px;
+                text-align: left;
+                font-style: normal;
+                text-transform: none;
+                float:right;
+
+            }
+        }
+        .relatedList{
+            background: #FFFFFF;
+            border-radius: 4px 4px 4px 4px;
+            width: 272px;
+            margin: 0 auto;
+            margin-top: 8px;
+
+            li {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 252px;
+                height: 48px;
+                align-items: center;
+                margin:6px 8px 8px 8px;
+                box-sizing: border-box;
+                .relatedListContent {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    width: 232px;
+                    .title {
+                        font-family: PingFang SC, PingFang SC;
+                        font-size: 12px;
+                        color: #262B4F;
+                        text-align: left;
+                        font-style: normal;
+                        text-transform: none;
+                    }
+                    .content {
+                        font-family: PingFang SC, PingFang SC;
+                        font-size: 10px;
+                        color: #86909C;
+                        text-align: left;
+                        font-style: normal;
+                        text-transform: none;
+                    }
+                }
+                img{
+                    width: 16px;
+                    height: 16px;
+                }
+
+            }
+            .line{
+                border-bottom: 1px solid #EAEFF5;
+                background-clip: content-box;
+            }
+        }
+    }
+    .chatBottomFix{
+        min-height: 76px;
+        width: 400px;
+        background: #FFFFFF;
+        border-radius: 0px 0px 12px 12px;
+        border-radius: 0px 0px 12px 12px;
+        .chatBottomGuessAsk {
+            .icon {
+                padding-top: 12px;
+                padding-bottom: 6px;
+                text-align: center;
+                img {
+                    width: 26px;
+                    height: 12px;
+                }
+            }
+            .scroll {
+                li {
+                    list-style: none;
+                    width: 368px;
+                    height: 32px;
+                    margin: 0 auto;
+                    cursor: pointer;
+                    font-family: PingFang SC, PingFang SC;
+                    font-size: 11px;
+                    color: #262B4F;
+                    line-height: 32px;
+                    text-align: left;
+                    font-style: normal;
+                    text-transform: none;
+                }
+            }
+        }
+        .chatBottomEnter {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 20px 16px;
+            box-sizing: border-box;
+            border-top: 1px solid #EAEFF5;
+
+            .chatBottomRight {
+                width:36px;
+                height:36px;
+            }
+        }
+    }
+}
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor:pointer;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+.dynamic-radius-textarea {
+    /* 初始样式（1-2行时） */
+    border-radius: 32px;
+    /*border: 2px solid rgb(1,1,1,0.08);*/
+
+    border-color: rgba(200,200,200, 0.2);
+    border: 4.8px solid #F9F9F9;
+    box-shadow: 0 0 0 4px rgba(245,246,249, 1);
+
+
+    width: 318px;
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+    font-size: 13px;
+    font-family: inherit;
+    overflow: auto; /* 强制显示滚动条 */
+    box-sizing: border-box;
+    background:#F9F9F9;
+    minHeight:'10px';
+
+
+    /* 自定义滚动条（兼容现代浏览器） */
+    scrollbar-width: thin;
+    scrollbar-color: #C8C8C8 transparent;
+    scrollbar-gutter: stable; /* 防止滚动条挤压内容 */
+    scroll-padding: 12px; /* 滚动时保留 padding 间距 */
+
+    /* 过渡动画 */
+    transition:
+            border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 0.3s ease;
+}
+.dynamic-radius-textarea:focus {
+    border-color: rgba(200,200,200, 0.2);
+    border: 4.8px solid #F9F9F9;
+    box-shadow: 0 0 0 4px rgba(245,246,249, 1);
+}
+
+/* 超过2行时的样式 */
+.dynamic-radius-textarea.multiline {
+    border-radius: 8px;
+}
+
+
+
+
+
