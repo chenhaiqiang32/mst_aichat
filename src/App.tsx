@@ -108,12 +108,12 @@ export default function TodoList() {
             messages: [...postMessage, userMessage], // 包含历史消息和新用户消息
             project_id:  window.config.project_id
         };
-
+        
         let assistantMessage = '';
 
         try {
             // @ts-ignore
-            await fetchEventSource(window.config.baseURL + '/chat', {
+            await fetchEventSource(window.configs.baseURL + '/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
