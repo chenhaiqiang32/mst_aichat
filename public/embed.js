@@ -23,7 +23,6 @@
     </svg>
     `;
 
-
   const originalIframeStyleText = `
     position: absolute;
     display: flex;
@@ -46,7 +45,7 @@
     transition-duration: 150ms;
     box-shadow: 0px 5px 22px 0px rgba(199,199,199,0.25);
     border-radius: 12px 12px 12px 12px;
-  `
+  `;
 
   const expandedIframeStyleText = `
     position: absolute;
@@ -70,11 +69,11 @@
     transition-property: width, height;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
-  `
+  `;
 
   // Main function to embed the chatbot
   async function embedChatbot() {
-    let isDragging = false
+    let isDragging = false;
 
     if (!config || !config.token) {
       console.error(`${configKey} is empty or token is not provided`);
@@ -108,24 +107,24 @@
       const compressedSystemVariables = {};
       await Promise.all(
         Object.entries(systemVariables).map(async ([key, value]) => {
-          compressedSystemVariables[`sys.${key}`] = await compressAndEncodeBase64(value);
+          compressedSystemVariables[`sys.${key}`] =
+            await compressAndEncodeBase64(value);
         })
       );
       return compressedSystemVariables;
     }
 
     const params = new URLSearchParams({
-      ...await getCompressedInputsFromConfig(),
-      ...await getCompressedSystemVariablesFromConfig()
+      ...(await getCompressedInputsFromConfig()),
+      ...(await getCompressedSystemVariablesFromConfig()),
     });
 
-    const baseUrl =
-      config.baseUrl || `https://${config.isDev ? "dev." : ""}udify.app`;
+    const baseUrl = config.iframeUrl || "https://ragsite.teamhelper.cn";
     const targetOrigin = new URL(baseUrl).origin;
 
     // pre-check the length of the URL
     // const iframeUrl = `${baseUrl}/chatbot/${config.token}?${params}`;
-    const iframeUrl = window.config.baseURL;
+    const iframeUrl = baseUrl;
     // 1) CREATE the iframe immediately, so it can load in the background:
     const preloadedIframe = createIframe();
     // 2) HIDE it by default:
@@ -134,7 +133,9 @@
     document.body.appendChild(preloadedIframe);
     // ─── End Fix Snippet
     if (iframeUrl.length > 2048) {
-      console.error("The URL is too long, please reduce the number of inputs to prevent the bot from failing to load");
+      console.error(
+        "The URL is too long, please reduce the number of inputs to prevent the bot from failing to load"
+      );
     }
 
     // Function to create the iframe for the chatbot
@@ -164,10 +165,10 @@
 
         if (buttonCenterY < viewportCenterY) {
           // targetIframe.style.top = `var(--${buttonId}-bottom, 1rem)`;
-          targetIframe.style.bottom = 'unset';
+          targetIframe.style.bottom = "unset";
         } else {
           // targetIframe.style.bottom = `var(--${buttonId}-bottom, 1rem)`;
-          targetIframe.style.top = 'unset';
+          targetIframe.style.top = "unset";
         }
 
         const viewportCenterX = window.innerWidth / 2;
@@ -175,10 +176,10 @@
 
         if (buttonCenterX < viewportCenterX) {
           targetIframe.style.left = `var(--${buttonId}-right, 1rem)`;
-          targetIframe.style.right = 'unset';
+          targetIframe.style.right = "unset";
         } else {
           targetIframe.style.right = `var(--${buttonId}-right, 1rem)`;
-          targetIframe.style.left = 'unset';
+          targetIframe.style.left = "unset";
         }
       }
     }
@@ -197,29 +198,30 @@
       resetIframePosition();
     }
 
-    window.addEventListener('message', (event) => {
+    window.addEventListener("message", (event) => {
       if (event.origin !== targetOrigin) return;
 
       const targetIframe = document.getElementById(iframeId);
       if (!targetIframe || event.source !== targetIframe.contentWindow) return;
 
-      if (event.data.type === 'dify-chatbot-iframe-ready') {
+      if (event.data.type === "dify-chatbot-iframe-ready") {
+        debugger;
         targetIframe.contentWindow?.postMessage(
           {
-            type: 'dify-chatbot-config',
+            type: "dify-chatbot-config",
             payload: {
               isToggledByButton: true,
               isDraggable: !!config.draggable,
-              baseUrl:config.baseUrl, // ip地址
-              chatName:config.chatName, // 默认小T
-              titleName:config.titleName // 标题名称
+              baseUrl: config.baseUrl, // ip地址
+              chatName: config.chatName, // 默认小T
+              titleName: config.titleName, // 标题名称
             },
           },
           targetOrigin
         );
       }
 
-      if (event.data.type === 'dify-chatbot-expand-change') {
+      if (event.data.type === "dify-chatbot-expand-change") {
         toggleExpand();
       }
     });

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import {useState, useEffect, useRef, JSX} from 'react';
+import {useState,useCallback, useEffect, useRef, JSX} from 'react';
 import GuessAskListComponent from './GuessAskList';
 import DebouncedTextarea from "./DebouncedTextarea";
 import { fetchEventSource,EventStreamContentType } from '@fortaine/fetch-event-source';
 import './app.css'
 import { Message, ChatCompletionParams } from './types';
-
+const isClient = typeof window !== 'undefined'
+const isIframe = isClient ? window.self !== window.top : false
 function getCurrentTime() {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
@@ -29,7 +30,8 @@ function getResponseData(remainText: string) {
 export default function TodoList() {
     const [messages, setMessages] = useState<Message[]>([]);
     const timeData:string = getCurrentTime(); // 气泡时间参数
-
+    const [parentOrigin, setParentOrigin] = useState('')
+    const [showToggleExpandButton, setShowToggleExpandButton] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
 
     const relatedIssues = (relatedLists: any[] | undefined)=>{ // 关联问题列表
@@ -57,6 +59,32 @@ export default function TodoList() {
     }
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const handleMessageReceived = useCallback((event: MessageEvent) => {
+        let currentParentOrigin = parentOrigin
+        if (!currentParentOrigin && event.data.type === 'dify-chatbot-config') {
+            currentParentOrigin = event.origin
+            setParentOrigin(event.origin)
+        }
+        if (event.origin !== currentParentOrigin)
+            return
+        if (event.data.type === 'dify-chatbot-config') {
+             setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable)
+        }
+           
+    }, [parentOrigin])
+
+    useEffect(() => {
+        if (!isIframe) return
+        const listener = (event: MessageEvent) => handleMessageReceived(event)
+        window.addEventListener('message', listener)
+
+        window.parent.postMessage({ type: 'dify-chatbot-iframe-ready' }, '*')
+
+        return () => window.removeEventListener('message', listener)
+    }, [isIframe, handleMessageReceived])
+
+
     // 滚动到最新消息
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
