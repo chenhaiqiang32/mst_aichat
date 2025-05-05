@@ -5,7 +5,7 @@ interface GuessAskPostResponse {
     recommended_queries_list: string[];
 }
 // @ts-ignore
-const DebouncedTextarea = ({ onEnter, delay = 500, ...props }) => {
+const DebouncedTextarea = ({ onEnter, delay = 500,sharedState, ...props }) => {
     const [value, setValue] = useState("");
     const timeoutRef = useRef(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -55,7 +55,7 @@ const DebouncedTextarea = ({ onEnter, delay = 500, ...props }) => {
             return
         }
         const response = await apiRequest.bottomScrollPost({
-            project_id: '001',
+            project_id: window.config.project_id,
             "user_input": value
         }) as GuessAskPostResponse;
 
@@ -71,6 +71,9 @@ const DebouncedTextarea = ({ onEnter, delay = 500, ...props }) => {
 
         setBottomScrollList(<ul>{chatBottomScrollListArr}</ul>);
     };
+    useEffect(() => {
+       handleChange({ target: { value: sharedState } })
+    }, [sharedState]);
     // 组件卸载时清除定时器（避免内存泄漏）
     useEffect(() => {
         return () => {

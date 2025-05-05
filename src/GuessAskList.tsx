@@ -8,12 +8,12 @@ interface GuessAskPostResponse {
 interface GuessAskListProps {
     projectId?: string;  // 可选的projectId参数
     itemCount?: number;  // 可选的显示数量
-    onRefresh?: () => void; // 可选的回调函数
+    onStateChange?: (value: string) => void;
 }
 const GuessAskListComponent: React.FC<GuessAskListProps> = ({
                                                        projectId = "001",
                                                        itemCount = 4,
-                                                       onRefresh
+                                                       onStateChange
                                                    }) => {
     const [guessAskListData, setGuessAskList] = useState<JSX.Element | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -31,8 +31,8 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
             const displayedQueries = response.recommended_queries_list.slice(0, itemCount);
 
             const listItems = displayedQueries.map((query, index) => (
-                <li key={index} className="guess-ask-item">
-                    <div className='guessAskListContent truncate' title={query}>
+                <li key={index} className="guess-ask-item"  onClick={(e) => onStateChange && onStateChange(query)}>
+                    <div className='guessAskListContent truncate' title={query} >
                         {query}
                     </div>
                     <img src='/icons/chatListIcon.png' alt="chat icon" className="chat-icon" />
@@ -42,9 +42,6 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
             setGuessAskList(<ul className="guess-ask-list">{listItems}</ul>);
 
             // 调用刷新回调（如果存在）
-            if (onRefresh) {
-                onRefresh();
-            }
         } catch (err) {
             console.error("Failed to fetch guess ask list:", err);
             setError("接口请求失败，请重试！");

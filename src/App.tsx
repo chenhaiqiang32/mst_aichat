@@ -29,9 +29,11 @@ function getResponseData(remainText: string) {
 
 export default function TodoList() {
     const [messages, setMessages] = useState<Message[]>([]);
+    const [iframeData, setIframeData] = useState({titleName: 'dewrew',chatName: '小T',projectId:'001'});
     const timeData:string = getCurrentTime(); // 气泡时间参数
     const [parentOrigin, setParentOrigin] = useState('')
     const [showToggleExpandButton, setShowToggleExpandButton] = useState(false)
+    const [sharedState, setSharedState] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const relatedIssues = (relatedLists: any[] | undefined)=>{ // 关联问题列表
@@ -69,7 +71,11 @@ export default function TodoList() {
         if (event.origin !== currentParentOrigin)
             return
         if (event.data.type === 'dify-chatbot-config') {
-             setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable)
+            setIframeData(event.data.postData);
+            (window as any).config = {
+              project_id: event.data.postData.projectId || '001',
+            };
+            setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable)
         }
            
     }, [parentOrigin])
@@ -100,7 +106,7 @@ export default function TodoList() {
         let postMessage = messages.filter(item => item.role !== 'reference');
         const requestParams: ChatCompletionParams = {
             messages: [...postMessage, userMessage], // 包含历史消息和新用户消息
-            project_id: '001'
+            project_id:  window.config.project_id
         };
 
         let assistantMessage = '';
@@ -167,63 +173,72 @@ export default function TodoList() {
         // 提交逻辑...
     };
     // @ts-ignore
-    return (
-        <div className='chatBg'>
-            <div className='chatBgNei'>
-                <div className="chatTopFix">
-                    <div className="chatTopFixTitle">
-                        <div className="chatTopLeft">智能助手</div>
-                        {/*<div className="chatTopRight"><img src='/icons/chatClose.png' alt=""/></div>*/}
-                    </div>
-                    <div className='line'></div>
-                </div>
-                <div className='mainScroll'>
-                    <div className='time'>{timeData}</div>
-                    <div className='chatT'>
-                        <img className="chatTImg" src='/icons/chatTIcon.png' alt=""/>
-                        <div className='chatTTitle'>小T</div>
-                        <div className='chatTContent'>您好，我是您的智能助理，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
-                    </div>
-                    <GuessAskListComponent projectId="001"
-                                  itemCount={4}
-                    ></GuessAskListComponent>
-                    {messages.map((message:Message, index: number) => {
-                        if (message.role === 'user') {
-                            return (
-                                <div className='askAi' key={`user-${index}`}>
-                                    <div className='askAiTitle'>我</div>
-                                    <div className='askAiContent'>{message.content}</div>
-                                    <img className='askAiIcon' src="/icons/chatPerson.png" alt=""/>
-                                </div>
-                            )
-                        }
-                        if(message.role === 'assistant') {
-                            return (
-                                <div className='chatT' key={`assistant-${index}`}>
-                                    <img className="chatTImg" src='/icons/chatTIcon.png' alt=""/>
-                                    <div className='chatTTitle'>小T</div>
-                                    <div className='chatTContent'>{message.content}</div>
-                                </div>
-                            )
-                        }
-                        if(message.role === 'reference') {
-                            return (
-                                <div className='relatedList' key={`reference-${index}`}>
-                                    {message.content}
-                                </div>
-                            )
-                        }
-                    })}
-                    {isLoading && (
-                        <div className="message">
-                            <div className="content">AI Thinking...</div>
+    if (showToggleExpandButton) {
+        return (
+            <div className='chatBg'>
+                <div className='chatBgNei'>
+                    <div className="chatTopFix">
+                        <div className="chatTopFixTitle">
+                            <div className="chatTopLeft">{ iframeData.titleName}</div>
+                            {/*<div className="chatTopRight"><img src='/icons/chatClose.png' alt=""/></div>*/}
                         </div>
-                    )}
-                    <div ref={messagesEndRef} />
+                        <div className='line'></div>
+                    </div>
+                    <div className='mainScroll'>
+                        <div className='time'>{timeData}</div>
+                        <div className='chatT'>
+                            <img className="chatTImg" src='/icons/chatTIcon.png' alt="" />
+                            <div className='chatTTitle'>{ iframeData.chatName}</div>
+                            <div className='chatTContent'>您好，我是您的{ iframeData.titleName}，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
+                        </div>
+                        <GuessAskListComponent projectId={window.config.project_id}
+                            itemCount={4}
+                            onStateChange={
+                                setSharedState
+                            } 
+                        ></GuessAskListComponent>
+                        {messages.map((message: Message, index: number) => {
+                            if (message.role === 'user') {
+                                return (
+                                    <div className='askAi' key={`user-${index}`}>
+                                        <div className='askAiTitle'>我</div>
+                                        <div className='askAiContent'>{message.content}</div>
+                                        <img className='askAiIcon' src="/icons/chatPerson.png" alt="" />
+                                    </div>
+                                )
+                            }
+                            if (message.role === 'assistant') {
+                                return (
+                                    <div className='chatT' key={`assistant-${index}`}>
+                                        <img className="chatTImg" src='/icons/chatTIcon.png' alt="" />
+                                        <div className='chatTTitle'>小T</div>
+                                        <div className='chatTContent'>{message.content}</div>
+                                    </div>
+                                )
+                            }
+                            if (message.role === 'reference') {
+                                return (
+                                    <div className='relatedList' key={`reference-${index}`}>
+                                        {message.content}
+                                    </div>
+                                )
+                            }
+                        })}
+                        {isLoading && (
+                            <div className="message">
+                                <div className="content">AI Thinking...</div>
+                            </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
+                    <DebouncedTextarea onEnter={handleEnter} delay={500} sharedState={sharedState}  ></DebouncedTextarea>
                 </div>
-                <DebouncedTextarea onEnter={handleEnter} delay={500}></DebouncedTextarea>
             </div>
-        </div>
-    );
+        );
+    } else {
+        return (
+            <div></div>
+        )
+    }
 }
 

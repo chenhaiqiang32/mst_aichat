@@ -2,7 +2,7 @@ import axios,{ AxiosError } from 'axios';
 // @ts-ignore
 axios.defaults.baseURL = window.config.baseURL + '/api';
 let abortController: AbortController | null = null;
-const guessAskPost=async (requestObj:Object)=>{
+const guessAskPost = async (requestObj: Object) => {
     return await commonPostRequest('/recommend/query_by_website_content',requestObj,null)
 }
 const cancelBottomPost= ()=>{

@@ -75,10 +75,10 @@
   async function embedChatbot() {
     let isDragging = false;
 
-    if (!config || !config.token) {
-      console.error(`${configKey} is empty or token is not provided`);
-      return;
-    }
+    // if (!config || !config.token) {
+    //   console.error(`${configKey} is empty or token is not provided`);
+    //   return;
+    // }
 
     async function compressAndEncodeBase64(input) {
       const uint8Array = new TextEncoder().encode(input);
@@ -205,16 +205,18 @@
       if (!targetIframe || event.source !== targetIframe.contentWindow) return;
 
       if (event.data.type === "dify-chatbot-iframe-ready") {
-        debugger;
         targetIframe.contentWindow?.postMessage(
           {
             type: "dify-chatbot-config",
             payload: {
               isToggledByButton: true,
               isDraggable: !!config.draggable,
-              baseUrl: config.baseUrl, // ip地址
-              chatName: config.chatName, // 默认小T
-              titleName: config.titleName, // 标题名称
+              baseUrl: config.iframeUrl, // ip地址
+            },
+            postData: {
+              chatName: config.chatName || "小T", // 默认小T
+              titleName: config.titleName || "智能助理", // 标题名称
+              projectId: config.projectId || "001",
             },
           },
           targetOrigin
