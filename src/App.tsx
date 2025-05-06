@@ -262,7 +262,7 @@ export default function TodoList() {
                         )}
                         <div ref={messagesEndRef} />
                     </div>
-                    <DebouncedTextarea onEnter={handleEnter} delay={500} sharedState={sharedState}  ></DebouncedTextarea>
+                    <DebouncedTextarea isLoading={isLoading} onEnter={handleEnter} delay={500} sharedState={sharedState}  ></DebouncedTextarea>
                 </div>
             </div>
         );

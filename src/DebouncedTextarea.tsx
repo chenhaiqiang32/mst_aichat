@@ -5,7 +5,7 @@ interface GuessAskPostResponse {
     recommended_queries_list: string[];
 }
 // @ts-ignore
-const DebouncedTextarea = ({ onEnter, delay = 500,sharedState, ...props }) => {
+const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...props }) => {
     const [value, setValue] = useState("");
     const timeoutRef = useRef(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -37,7 +37,7 @@ const DebouncedTextarea = ({ onEnter, delay = 500,sharedState, ...props }) => {
     };
 
     const submit =()=> {
-        if (onEnter) {
+        if (onEnter && value && !isLoading) {
             onEnter(value); // 传递给父组件
             setValue('');
             fetchGuessAskList('')
