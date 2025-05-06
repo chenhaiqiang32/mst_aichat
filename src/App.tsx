@@ -5,6 +5,7 @@ import DebouncedTextarea from "./DebouncedTextarea";
 import { fetchEventSource,EventStreamContentType } from '@fortaine/fetch-event-source';
 import './app.css'
 import { Message, ChatCompletionParams } from './types';
+import apiRequest from "./request";
 const isClient = typeof window !== 'undefined'
 const isIframe = isClient ? window.self !== window.top : false
 function getCurrentTime() {
@@ -64,18 +65,21 @@ export default function TodoList() {
 
     const handleMessageReceived = useCallback((event: MessageEvent) => {
         let currentParentOrigin = parentOrigin
-        if (!currentParentOrigin && event.data.type === 'dify-chatbot-config') {
+        if (!currentParentOrigin && event.data.type === 'chatbot-config') {
             currentParentOrigin = event.origin
             setParentOrigin(event.origin)
         }
         if (event.origin !== currentParentOrigin)
             return
-        if (event.data.type === 'dify-chatbot-config') {
+        if (event.data.type === 'chatbot-config') {
             setIframeData(event.data.postData);
             (window as any).config = {
-              project_id: event.data.postData.projectId || '001',
+                project_id: event.data.postData.projectId || '001',
+                baseURL: event.data.postData.apiUrl || "https://ragsite.teamhelper.cn/api",
+                
             };
-            setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable)
+            apiRequest.setDefaultUrl() // 设置默认接口请求地址
+            setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable) // 渲染dom
         }
            
     }, [parentOrigin])
@@ -85,7 +89,7 @@ export default function TodoList() {
         const listener = (event: MessageEvent) => handleMessageReceived(event)
         window.addEventListener('message', listener)
 
-        window.parent.postMessage({ type: 'dify-chatbot-iframe-ready' }, '*')
+        window.parent.postMessage({ type: 'chatbot-iframe-ready' }, '*')
 
         return () => window.removeEventListener('message', listener)
     }, [isIframe, handleMessageReceived])
@@ -113,7 +117,7 @@ export default function TodoList() {
 
         try {
             // @ts-ignore
-            await fetchEventSource(window.configs.baseURL + '/chat', {
+            await fetchEventSource(window.config.baseURL + '/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

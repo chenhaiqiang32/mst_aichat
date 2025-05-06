@@ -6,6 +6,7 @@ declare global {
   interface Window {
     config: {
       project_id?: string;
+      baseURL?: string;
       // 可以添加其他可能的属性
     };
   }

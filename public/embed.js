@@ -9,8 +9,8 @@
 (function () {
   // Constants for DOM element IDs and configuration key
   const configKey = "difyChatbotConfig";
-  const buttonId = "dify-chatbot-bubble-button";
-  const iframeId = "dify-chatbot-bubble-window";
+  const buttonId = "chatbot-bubble-button";
+  const iframeId = "chatbot-bubble-window";
   const config = window[configKey];
   let isExpanded = false;
 
@@ -29,12 +29,12 @@
     flex-direction: column;
     justify-content: flex-start;
     top: unset;
-    right: var(--${buttonId}-right, 1rem); /* Align with dify-chatbot-bubble-button. */
+    right: var(--${buttonId}-right, 1rem); /* Align with chatbot-bubble-button. */
     bottom: 72px !important;
     left: unset;
-    width: 400px !important; /* Align with dify-chatbot-bubble-button. */;
+    width: 400px !important; /* Align with chatbot-bubble-button. */;
     max-width: calc(100vw - 2rem);
-    height: 540px !important; /* Align with dify-chatbot-bubble-button. */;
+    height: 540px !important; /* Align with chatbot-bubble-button. */;
     max-height: calc(100vh - 6rem);
     border: none;
     z-index: 2147483640;
@@ -53,8 +53,8 @@
     flex-direction: column;
     justify-content: space-between;
     top: unset;
-    right: var(--${buttonId}-right, 1rem); /* Align with dify-chatbot-bubble-button. */
-    bottom: var(--${buttonId}-bottom, 1rem); /* Align with dify-chatbot-bubble-button. */
+    right: var(--${buttonId}-right, 1rem); /* Align with chatbot-bubble-button. */
+    bottom: var(--${buttonId}-bottom, 1rem); /* Align with chatbot-bubble-button. */
     left: unset;
     min-width: 24rem;
     width: 48%;
@@ -142,7 +142,7 @@
     function createIframe() {
       const iframe = document.createElement("iframe");
       iframe.allow = "fullscreen;microphone";
-      iframe.title = "dify chatbot bubble window";
+      iframe.title = "chatbot bubble window";
       iframe.id = iframeId;
       iframe.src = iframeUrl;
       iframe.style.cssText = originalIframeStyleText;
@@ -204,10 +204,10 @@
       const targetIframe = document.getElementById(iframeId);
       if (!targetIframe || event.source !== targetIframe.contentWindow) return;
 
-      if (event.data.type === "dify-chatbot-iframe-ready") {
+      if (event.data.type === "chatbot-iframe-ready") {
         targetIframe.contentWindow?.postMessage(
           {
-            type: "dify-chatbot-config",
+            type: "chatbot-config",
             payload: {
               isToggledByButton: true,
               isDraggable: !!config.draggable,
@@ -217,13 +217,14 @@
               chatName: config.chatName || "小T", // 默认小T
               titleName: config.titleName || "智能助理", // 标题名称
               projectId: config.projectId || "001",
+              apiUrl: config.apiUrl || "https://ragsite.teamhelper.cn/api",
             },
           },
           targetOrigin
         );
       }
 
-      if (event.data.type === "dify-chatbot-expand-change") {
+      if (event.data.type === "chatbot-expand-change") {
         toggleExpand();
       }
     });

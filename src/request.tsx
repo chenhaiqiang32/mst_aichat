@@ -1,7 +1,9 @@
 import axios,{ AxiosError } from 'axios';
 // @ts-ignore
-axios.defaults.baseURL = window.configs.baseURL;
 let abortController: AbortController | null = null;
+const setDefaultUrl = () => {
+    axios.defaults.baseURL = window.config.baseURL || '';
+}
 const guessAskPost = async (requestObj: Object) => {
     return await commonPostRequest('/recommend/query_by_website_content',requestObj,null)
 }
@@ -42,4 +44,4 @@ const commonPostRequest = async (url:string,postData:object,single:Object|null  
     })
 }
 
-export default {guessAskPost,bottomScrollPost,cancelBottomPost}
+export default {guessAskPost,bottomScrollPost,cancelBottomPost,setDefaultUrl}
