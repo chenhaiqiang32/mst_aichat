@@ -65,7 +65,7 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
             <div className="guessAskTop">
                 <div className="guessAskLeft">
                     <img src='/icons/chatAnswerIcon.png' alt="" />
-                    <div className="name">猜你想问</div>
+                    <div className="name enableSelect">猜你想问</div>
                 </div>
                 {!isLoading && <div className="guessAskRight" >
                     <div className="name" onClick={handleRefreshClick}>{'换一换'}</div>

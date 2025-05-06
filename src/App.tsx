@@ -8,6 +8,7 @@ import { Message, ChatCompletionParams } from './types';
 import apiRequest from "./request";
 const isClient = typeof window !== 'undefined'
 const isIframe = isClient ? window.self !== window.top : false
+let lastTime = ''
 function getCurrentTime() {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
@@ -27,14 +28,19 @@ function getResponseData(remainText: string) {
     }
     return null;  // 当没有剩余文本时返回null
 }
+const getTime:()=>string = () => {
+    let timeData: string = getCurrentTime(); // 气泡时间参数
+    return timeData;
+}
+
 
 export default function TodoList() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [iframeData, setIframeData] = useState({titleName: 'dewrew',chatName: '小T',projectId:'001'});
-    const timeData:string = getCurrentTime(); // 气泡时间参数
     const [parentOrigin, setParentOrigin] = useState('')
     const [showToggleExpandButton, setShowToggleExpandButton] = useState(false)
     const [sharedState, setSharedState] = useState('');
+    const [currentTime, setCurrentTime] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const relatedIssues = (relatedLists: any[] | undefined)=>{ // 关联问题列表
@@ -93,7 +99,12 @@ export default function TodoList() {
 
         return () => window.removeEventListener('message', listener)
     }, [isIframe, handleMessageReceived])
-
+    useEffect(() => {
+        let timeData: string = getCurrentTime(); // 气泡时间参数
+        lastTime = timeData;
+        setCurrentTime(lastTime)
+        return ()=>{lastTime}
+    }, [])
 
     // 滚动到最新消息
     useEffect(() => {
@@ -104,6 +115,15 @@ export default function TodoList() {
             role: 'user',
             content: text,
         };
+        let currentTime = getTime();
+        if (currentTime !== lastTime) { // 时间变了
+            const timeMessage: Message = {
+                role: 'time',
+                content: currentTime,
+            };
+            lastTime = currentTime;
+            setMessages((prev) => [...prev, timeMessage]);
+        }
         setMessages((prev) => [...prev, userMessage]);
         setIsLoading(true);
         // 准备请求参数
@@ -183,17 +203,17 @@ export default function TodoList() {
                 <div className='chatBgNei'>
                     <div className="chatTopFix">
                         <div className="chatTopFixTitle">
-                            <div className="chatTopLeft">{ iframeData.titleName}</div>
+                            <div className="chatTopLeft enableSelect">{ iframeData.titleName}</div>
                             {/*<div className="chatTopRight"><img src='/icons/chatClose.png' alt=""/></div>*/}
                         </div>
                         <div className='line'></div>
                     </div>
                     <div className='mainScroll'>
-                        <div className='time'>{timeData}</div>
+                        <div className='time enableSelect'>{currentTime}</div>
                         <div className='chatT'>
                             <img className="chatTImg" src='/icons/chatTIcon.png' alt="" />
-                            <div className='chatTTitle'>{ iframeData.chatName}</div>
-                            <div className='chatTContent'>您好，我是您的{ iframeData.titleName}，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
+                            <div className='chatTTitle enableSelect'>{ iframeData.chatName}</div>
+                            <div className='chatTContent enableSelect'>您好，我是您的{ iframeData.titleName}，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
                         </div>
                         <GuessAskListComponent projectId={window.config.project_id}
                             itemCount={4}
@@ -202,20 +222,27 @@ export default function TodoList() {
                             } 
                         ></GuessAskListComponent>
                         {messages.map((message: Message, index: number) => {
+                            if (message.role === 'time') {
+                                return (
+                                    <div className='time enableSelect' style={{margin:'16px auto'}}>{message.content}</div>
+                                )
+                            }
                             if (message.role === 'user') {
                                 return (
-                                    <div className='askAi' key={`user-${index}`}>
-                                        <div className='askAiTitle'>我</div>
+                                    <div>
+                                        <div className='askAi' key={`user-${index}`}>
+                                        <div className='askAiTitle enableSelect'>我</div>
                                         <div className='askAiContent'>{message.content}</div>
-                                        <img className='askAiIcon' src="/icons/chatPerson.png" alt="" />
+                                        <img className='askAiIcon enableSelect' src="/icons/chatPerson.png" alt="" />
+                                    </div>
                                     </div>
                                 )
                             }
                             if (message.role === 'assistant') {
                                 return (
                                     <div className='chatT' key={`assistant-${index}`}>
-                                        <img className="chatTImg" src='/icons/chatTIcon.png' alt="" />
-                                        <div className='chatTTitle'>小T</div>
+                                        <img className="chatTImg enableSelect no-drag" src='/icons/chatTIcon.png' alt="" />
+                                        <div className='chatTTitle enableSelect'>{iframeData.chatName}</div>
                                         <div className='chatTContent'>{message.content}</div>
                                     </div>
                                 )

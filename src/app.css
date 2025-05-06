@@ -374,6 +374,7 @@
             .chatBottomRight {
                 width:36px;
                 height:36px;
+                cursor: pointer;
             }
         }
     }
@@ -432,7 +433,11 @@ ul {
     border-radius: 8px;
 }
 
+.enableSelect {
+    user-select: none;
+}
 
-
-
-
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+}

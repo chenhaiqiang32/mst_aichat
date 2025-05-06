@@ -1,7 +1,7 @@
 import {JSX} from "react";
 
 export interface Message {
-    role: 'user' | 'assistant' | 'reference';
+    role: 'user' | 'assistant' | 'reference'| 'time';
     content: string | JSX.Element;
 }
 
