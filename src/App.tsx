@@ -78,17 +78,20 @@ export default function TodoList() {
         if (event.origin !== currentParentOrigin)
             return
         if (event.data.type === 'chatbot-config') {
-            setIframeData(event.data.postData);
-            (window as any).config = {
-                project_id: event.data.postData.projectId || '001',
-                baseURL: event.data.postData.apiUrl || "https://ragsite.teamhelper.cn/api",
-                
-            };
-            apiRequest.setDefaultUrl() // 设置默认接口请求地址
-            setShowToggleExpandButton(event.data.payload.isToggledByButton && !event.data.payload.isDraggable) // 渲染dom
+            setIframeToDom(event.data.postData)
         }
            
     }, [parentOrigin])
+
+    const setIframeToDom = (postData: { titleName: string; chatName: string; projectId: string; apiUrl:string}) => {
+        setIframeData(postData);
+        (window as any).config = {
+            project_id: postData.projectId || '001',
+            baseURL: postData.apiUrl || "https://ragsite.teamhelper.cn/api",    
+        };
+        apiRequest.setDefaultUrl() // 设置默认接口请求地址
+        setShowToggleExpandButton(true) // 渲染dom
+    }
 
     useEffect(() => {
         if (!isIframe) return
@@ -105,7 +108,22 @@ export default function TodoList() {
         setCurrentTime(lastTime)
         return ()=>{lastTime}
     }, [])
-
+    useEffect(() => {
+        if (!isIframe) return
+        const urlParams = new URLSearchParams(window.location.search);
+        const apiUrl = urlParams.get("apiUrl");
+        const titleName = urlParams.get("titleName");
+        const chatName = urlParams.get("chatName");
+        const projectId = urlParams.get("projectId");
+        setIframeToDom(
+            {
+              chatName: chatName || "小T", // 默认小T
+              titleName: titleName || "智能助理", // 标题名称
+              projectId: projectId || "001",
+              apiUrl: apiUrl || "https://ragsite.teamhelper.cn/api",
+            }
+        )
+    }, [])
     // 滚动到最新消息
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
