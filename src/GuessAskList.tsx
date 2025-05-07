@@ -80,16 +80,32 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
                 <div className="guessAskList">
                     <ul className="guess-ask-list">
                         <li className="guess-ask-item">
-                            <Skeleton width={268} height={37} />
+                            <Skeleton
+                                style={{
+                                width: "calc(100% - 20px)", // 使用 CSS calc()
+                                height: 37,
+                            }} />
                         </li>
                         <li className="guess-ask-item">
-                            <Skeleton  width={268} height={37} />
+                            <Skeleton
+                                style={{
+                                width: "calc(100% - 20px)", // 使用 CSS calc()
+                                height: 37,
+                            }} />
                         </li>
                         <li className="guess-ask-item">
-                            <Skeleton width={268} height={37} />
+                            <Skeleton
+                                style={{
+                                width: "calc(100% - 20px)", // 使用 CSS calc()
+                                height: 37,
+                            }} />
                         </li>
                         <li className="guess-ask-item">
-                            <Skeleton width={268} height={37} />
+                            <Skeleton
+                                style={{
+                                width: "calc(100% - 20px)", // 使用 CSS calc()
+                                height: 37,
+                            }} />
                         </li>
                     </ul>
                 </div>
