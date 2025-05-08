@@ -2,7 +2,7 @@ import React, { useState, useEffect,JSX } from 'react';
 import apiRequest from "./request";
 import Skeleton from '@mui/material/Skeleton';
 interface GuessAskPostResponse {
-    recommended_queries_list: string[];
+    queries_list:string[];
 }
 
 interface GuessAskListProps {
@@ -25,10 +25,11 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
 
         try {
             const response = await apiRequest.guessAskPost({
-                project_id: projectId
+                project_id: projectId,
+                "amount": 4
             }) as GuessAskPostResponse;
 
-            const displayedQueries = response.recommended_queries_list.slice(0, itemCount);
+            const displayedQueries = response.queries_list;
 
             const listItems = displayedQueries.map((query, index) => (
                 <li key={index} className="guess-ask-item"  onClick={(e) => onStateChange && onStateChange(query)}>

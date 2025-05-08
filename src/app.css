@@ -63,7 +63,7 @@
             text-transform: none;
             margin-top: 8px;
             .content{
-                width: 272px;
+                width: 68%;
                 margin: 0 auto;
             }
         }
@@ -189,7 +189,7 @@
                     padding:0 8px;
                     box-sizing: border-box;
                     .guessAskListContent {
-                        width: calc(100% - 50px);
+                        width: calc(100% - 32px);
                         height: 17px;
                         font-family: PingFang SC, PingFang SC;
                         font-size: 12px;
@@ -280,7 +280,7 @@
         .relatedList{
             background: #FFFFFF;
             border-radius: 4px 4px 4px 4px;
-            width: 272px;
+            width: 68%;
             margin: 0 auto;
             margin-top: 8px;
 
@@ -288,16 +288,16 @@
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
-                width: 252px;
+                width: 100%;
                 height: 48px;
                 align-items: center;
-                margin:6px 8px 8px 8px;
+                padding:6px 8px 8px 8px;
                 box-sizing: border-box;
                 .relatedListContent {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    width: 232px;
+                    width: calc(100% - 32px);
                     .title {
                         font-family: PingFang SC, PingFang SC;
                         font-size: 12px;
@@ -318,6 +318,8 @@
                 img{
                     width: 16px;
                     height: 16px;
+                    margin: 0 auto;
+                    display: block;
                 }
 
             }
@@ -368,7 +370,7 @@
             box-sizing: border-box;
             border-top: 1px solid #EAEFF5;
             .chatBottomLeft {
-                width: calc(100% - 50px);
+                width: calc(100% - 48px);
 
             }
             .chatBottomRight {
@@ -449,4 +451,39 @@ body {
     padding: 0;
     overflow: hidden;
     /* 防止滚动条 */
+}
+
+/* Mermaid 思维导图样式 */
+.mermaid-diagram {
+    margin: 20px 0;
+    padding: 10px;
+    overflow-x: auto;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+.mermaid-diagram svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* mindmap 特定样式 */
+.mindmap-node rect {
+    fill: #f0f8ff;
+    stroke: #5f9ea0;
+    stroke-width: 2px;
+}
+
+.mindmap-node text {
+    fill: #333;
+}
+
+.mindmap-node.root rect {
+    fill: #e0f7fa;
+    stroke: #00bcd4;
+}
+
+.mindmap-edge {
+    stroke: #999;
+    stroke-width: 1.5px;
 }

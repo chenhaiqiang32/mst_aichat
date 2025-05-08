@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect, KeyboardEvent, JSX} from "react";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import apiRequest from "./request";
 interface GuessAskPostResponse {
-    recommended_queries_list: string[];
+    queries_list: string[];
 }
 // @ts-ignore
 const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...props }) => {
@@ -10,6 +10,8 @@ const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...prop
     const timeoutRef = useRef(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [hasMultipleLines, setHasMultipleLines] = useState(false);
+    const [isEnterKeyPressed, setIsEnterKeyPressed] = useState(false);
+    
     // 500ms 无输入时打印 "没有输入"
     const handleChange = (e: { target: { value: any; }; }) => {
         const newValue = e.target.value;
@@ -32,7 +34,14 @@ const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...prop
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault(); // 阻止默认换行行为
-            submit()
+            setIsEnterKeyPressed(true);
+        }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey && isEnterKeyPressed) {
+            setIsEnterKeyPressed(false);
+            submit();
         }
     };
 
@@ -54,12 +63,13 @@ const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...prop
             apiRequest.cancelBottomPost() // 中断之前请求
             return
         }
-        const response = await apiRequest.bottomScrollPost({
+        const response = await apiRequest.guessAskPost({
             project_id: window.config.project_id,
-            "user_input": value
+            "amount": 4,
+            "keywords": value
         }) as GuessAskPostResponse;
 
-        displayedQueries = response.recommended_queries_list.slice(0, 4);
+        displayedQueries = response.queries_list;
 
         const chatBottomScrollListArr = displayedQueries.map((child:string,index:number)=>
             <li key={index}
@@ -117,6 +127,7 @@ const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...prop
                     placeholder="请输入，按Enter直接发送消息，Shift+Enter换行"
                     value={value}
                     onKeyDown={handleKeyDown}
+                    onKeyUp={handleKeyUp}
                     className={`dynamic-radius-textarea ${hasMultipleLines ? 'multiline' : ''}`}
                     onChange={handleChange}
                     {...props}

@@ -1,11 +1,19 @@
 import * as React from 'react';
-import {useState,useCallback, useEffect, useRef, JSX} from 'react';
+import { useState, useCallback, useEffect, useRef, JSX } from 'react';
 import GuessAskListComponent from './GuessAskList';
 import DebouncedTextarea from "./DebouncedTextarea";
-import { fetchEventSource,EventStreamContentType } from '@fortaine/fetch-event-source';
+import { fetchEventSource, EventStreamContentType } from '@fortaine/fetch-event-source';
 import './app.css'
+import ReactMarkdown from 'react-markdown'
+import RemarkMath from 'remark-math'
+import RemarkBreaks from 'remark-breaks'
+import RemarkGfm from 'remark-gfm'
+import rehypeKatex from 'rehype-katex'
+import rehypeRaw from 'rehype-raw'
 import { Message, ChatCompletionParams } from './types';
 import apiRequest from "./request";
+// Import custom components for markdown rendering
+import { CodeBlock, Img, VideoBlock, AudioBlock, Link, Paragraph, MarkdownButton, MarkdownForm, ScriptBlock, ThinkBlock } from './markdownComponents';
 const isClient = typeof window !== 'undefined'
 const isIframe = isClient ? window.self !== window.top : false
 let lastTime = ''
@@ -28,7 +36,7 @@ function getResponseData(remainText: string) {
     }
     return null;  // 当没有剩余文本时返回null
 }
-const getTime:()=>string = () => {
+const getTime: () => string = () => {
     let timeData: string = getCurrentTime(); // 气泡时间参数
     return timeData;
 }
@@ -36,15 +44,15 @@ const getTime:()=>string = () => {
 
 export default function TodoList() {
     const [messages, setMessages] = useState<Message[]>([]);
-    const [iframeData, setIframeData] = useState({titleName: 'dewrew',chatName: '小T',projectId:'001'});
+    const [iframeData, setIframeData] = useState({ titleName: 'dewrew', chatName: '小T', projectId: '001' });
     const [parentOrigin, setParentOrigin] = useState('')
     const [showToggleExpandButton, setShowToggleExpandButton] = useState(false)
     const [sharedState, setSharedState] = useState('');
     const [currentTime, setCurrentTime] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const relatedIssues = (relatedLists: any[] | undefined)=>{ // 关联问题列表
-        if(!relatedLists || relatedLists.length === 0){
+    const relatedIssues = (relatedLists: any[] | undefined) => { // 关联问题列表
+        if (!relatedLists || relatedLists.length === 0) {
             setMessages((prev) => {
                 return [
                     ...prev,
@@ -53,11 +61,11 @@ export default function TodoList() {
             });
             return;
         }
-        const handleClick = (url:string) => {
+        const handleClick = (url: string) => {
             window.open(url, '_blank', 'noopener,noreferrer');
         };
-        const relatedListsArr = relatedLists && relatedLists.map((child,index)=>
-            <li onClick={() => handleClick(child.url)} key={index} className={index === relatedLists.length -1 ? "":'line'}><div className='relatedListContent'><div className="title truncate" title={child.title}>{child.title}</div><div className="content truncate" title={child.content}>{child.content}</div></div><div><img src='/icons/chatListIcon.png' alt="" /></div> </li>
+        const relatedListsArr = relatedLists && relatedLists.map((child, index) =>
+            <li onClick={() => handleClick(child.url)} key={index} className={index === relatedLists.length - 1 ? "" : 'line'}><div className='relatedListContent'><div className="title truncate" title={child.title}>{child.title}</div><div className="content truncate" title={child.content}>{child.content}</div></div><div><img src='/icons/chatListIcon.png' alt="" /></div> </li>
         );
         setMessages((prev) => {
             return [
@@ -80,14 +88,14 @@ export default function TodoList() {
         if (event.data.type === 'chatbot-config') {
             setIframeToDom(event.data.postData)
         }
-           
+
     }, [parentOrigin])
 
-    const setIframeToDom = (postData: { titleName: string; chatName: string; projectId: string; apiUrl:string}) => {
+    const setIframeToDom = (postData: { titleName: string; chatName: string; projectId: string; apiUrl: string }) => {
         setIframeData(postData);
         (window as any).config = {
             project_id: postData.projectId || '001',
-            baseURL: postData.apiUrl || "https://ragsite.teamhelper.cn/api",    
+            baseURL: postData.apiUrl || "https://ragsite.teamhelper.cn/api",
         };
         apiRequest.setDefaultUrl() // 设置默认接口请求地址
         setShowToggleExpandButton(true) // 渲染dom
@@ -106,7 +114,7 @@ export default function TodoList() {
         let timeData: string = getCurrentTime(); // 气泡时间参数
         lastTime = timeData;
         setCurrentTime(lastTime)
-        return ()=>{lastTime}
+        return () => { lastTime }
     }, [])
     useEffect(() => {
         if (!isIframe) return
@@ -117,10 +125,10 @@ export default function TodoList() {
         const projectId = urlParams.get("projectId");
         setIframeToDom(
             {
-              chatName: chatName || "小T", // 默认小T
-              titleName: titleName || "智能助理", // 标题名称
-              projectId: projectId || "001",
-              apiUrl: apiUrl || "https://ragsite.teamhelper.cn/api",
+                chatName: chatName || "小T", // 默认小T
+                titleName: titleName || "智能助理", // 标题名称
+                projectId: projectId || "001",
+                apiUrl: apiUrl || "https://ragsite.teamhelper.cn/api",
             }
         )
     }, [])
@@ -148,7 +156,7 @@ export default function TodoList() {
         let postMessage = messages.filter(item => item.role !== 'reference');
         const requestParams: ChatCompletionParams = {
             messages: [...postMessage, userMessage], // 包含历史消息和新用户消息
-            project_id:  window.config.project_id
+            project_id: window.config.project_id
         };
 
         let assistantMessage = '';
@@ -170,7 +178,7 @@ export default function TodoList() {
                 onmessage: (event) => {
                     try {
                         const data = JSON.parse(event.data);
-                        if(data.reference) {
+                        if (data.reference) {
                             relatedIssues(data.reference)
                             setIsLoading(false);
                             return;
@@ -179,8 +187,7 @@ export default function TodoList() {
                         if (data.answer.length > 0) {
                             let result = getResponseData(data.answer);
                             while (result) {
-                                assistantMessage =assistantMessage + result.responseText;
-                                console.log(result.responseText);
+                                assistantMessage = assistantMessage + result.responseText;
                                 result = result.next();  // 获取下一批次
                                 setMessages((prev) => {
                                     const lastMessage = prev[prev.length - 1];
@@ -221,7 +228,7 @@ export default function TodoList() {
                 <div className='chatBgNei'>
                     <div className="chatTopFix">
                         <div className="chatTopFixTitle">
-                            <div className="chatTopLeft enableSelect">{ iframeData.titleName}</div>
+                            <div className="chatTopLeft enableSelect">{iframeData.titleName}</div>
                             {/*<div className="chatTopRight"><img src='/icons/chatClose.png' alt=""/></div>*/}
                         </div>
                         <div className='line'></div>
@@ -230,29 +237,29 @@ export default function TodoList() {
                         <div className='time enableSelect'>{currentTime}</div>
                         <div className='chatT'>
                             <img className="chatTImg" src='/icons/chatTIcon.png' alt="" />
-                            <div className='chatTTitle enableSelect'>{ iframeData.chatName}</div>
-                            <div className='chatTContent enableSelect'>您好，我是您的{ iframeData.titleName}，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
+                            <div className='chatTTitle enableSelect'>{iframeData.chatName}</div>
+                            <div className='chatTContent enableSelect'>您好，我是您的{iframeData.titleName}，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
                         </div>
                         <GuessAskListComponent projectId={window.config.project_id}
                             itemCount={4}
                             onStateChange={
                                 setSharedState
-                            } 
+                            }
                         ></GuessAskListComponent>
                         {messages.map((message: Message, index: number) => {
                             if (message.role === 'time') {
                                 return (
-                                    <div className='time enableSelect' style={{margin:'16px auto'}}>{message.content}</div>
+                                    <div className='time enableSelect' style={{ margin: '16px auto' }}>{message.content}</div>
                                 )
                             }
                             if (message.role === 'user') {
                                 return (
                                     <div>
                                         <div className='askAi' key={`user-${index}`}>
-                                        <div className='askAiTitle enableSelect'>我</div>
-                                        <div className='askAiContent'>{message.content}</div>
-                                        <img className='askAiIcon enableSelect' src="/icons/chatPerson.png" alt="" />
-                                    </div>
+                                            <div className='askAiTitle enableSelect'>我</div>
+                                            <div className='askAiContent'>{message.content}</div>
+                                            <img className='askAiIcon enableSelect' src="/icons/chatPerson.png" alt="" />
+                                        </div>
                                     </div>
                                 )
                             }
@@ -261,7 +268,55 @@ export default function TodoList() {
                                     <div className='chatT' key={`assistant-${index}`}>
                                         <img className="chatTImg enableSelect no-drag" src='/icons/chatTIcon.png' alt="" />
                                         <div className='chatTTitle enableSelect'>{iframeData.chatName}</div>
-                                        <div className='chatTContent'>{message.content}</div>
+                                        <div className='chatTContent'>
+                                            {typeof message.content === 'string' ?
+                                                <ReactMarkdown
+                                                    remarkPlugins={[
+                                                        RemarkGfm,
+                                                        [RemarkMath, { singleDollarTextMath: false }],
+                                                        RemarkBreaks,
+                                                    ]}
+                                                    rehypePlugins={[
+                                                        rehypeKatex,
+                                                        rehypeRaw,
+                                                        // The Rehype plug-in is used to remove the ref attribute of an element
+                                                        () => {
+                                                            return (tree) => {
+                                                                const iterate = (node: any) => {
+                                                                    if (node.type === 'element' && node.properties?.ref)
+                                                                        delete node.properties.ref
+
+                                                                    if (node.type === 'element' && !/^[a-z][a-z0-9]*$/i.test(node.tagName)) {
+                                                                        node.type = 'text'
+                                                                        node.value = `<${node.tagName}`
+                                                                    }
+
+                                                                    if (node.children)
+                                                                        node.children.forEach(iterate)
+                                                                }
+                                                                tree.children.forEach(iterate)
+                                                            }
+                                                        },
+                                                    ]}
+                                                    disallowedElements={['iframe', 'head', 'html', 'meta', 'link', 'style', 'body']}
+                                                    components={{
+                                                        code: CodeBlock,
+                                                        img: Img,
+                                                        video: VideoBlock,
+                                                        audio: AudioBlock,
+                                                        a: Link,
+                                                        p: Paragraph,
+                                                        button: MarkdownButton,
+                                                        form: MarkdownForm,
+                                                        script: ScriptBlock,
+                                                        details: ThinkBlock,
+                                                    }}
+                                                >
+                                                    {message.content}
+                                                </ReactMarkdown> :
+                                                message.content
+                                            }
+                                        </div>
                                     </div>
                                 )
                             }

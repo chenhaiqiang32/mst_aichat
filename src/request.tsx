@@ -5,7 +5,7 @@ const setDefaultUrl = () => {
     axios.defaults.baseURL = window.config.baseURL || '';
 }
 const guessAskPost = async (requestObj: Object) => {
-    return await commonPostRequest('/recommend/query_by_website_content',requestObj,null)
+    return await commonPostRequest('/query_list/load',requestObj,null)
 }
 const cancelBottomPost= ()=>{
     if (abortController) {

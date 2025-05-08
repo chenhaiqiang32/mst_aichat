@@ -10,9 +10,19 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "axios": "^1.9.0",
+    "install": "^0.13.0",
+    "mermaid": "^11.6.0",
+    "npm": "^11.3.0",
     "react": "latest",
     "react-dom": "latest",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.5.3",
     "react-scripts": "latest",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
     "typescript": "latest"
   },
   "scripts": {
@@ -32,5 +42,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1"
   }
 }
