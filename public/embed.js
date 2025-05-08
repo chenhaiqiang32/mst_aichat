@@ -24,7 +24,7 @@
     `;
 
   const originalIframeStyleText = `
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
