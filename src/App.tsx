@@ -16,6 +16,13 @@ import apiRequest from "./request";
 import { CodeBlock, Img, VideoBlock, AudioBlock, Link, Paragraph, MarkdownButton, MarkdownForm, ScriptBlock, ThinkBlock } from './markdownComponents';
 const isClient = typeof window !== 'undefined'
 const isIframe = isClient ? window.self !== window.top : false
+// 在 GitHub Pages 部署时，使用相对路径
+// 当 homepage: "." 时，PUBLIC_URL 在生产环境为空，需要使用相对路径
+const PUBLIC_URL = process.env.PUBLIC_URL || (process.env.NODE_ENV === 'production' ? '' : '');
+const getPublicPath = (path: string) => {
+  const base = PUBLIC_URL || './';
+  return `${base}${path.startsWith('/') ? path.slice(1) : path}`;
+};
 let lastTime = ''
 function getCurrentTime() {
     const now = new Date();
@@ -65,7 +72,7 @@ export default function TodoList() {
             window.open(url, '_blank', 'noopener,noreferrer');
         };
         const relatedListsArr = relatedLists && relatedLists.map((child, index) =>
-            <li onClick={() => handleClick(child.url)} key={index} className={index === relatedLists.length - 1 ? "" : 'line'}><div className='relatedListContent'><div className="title truncate" title={child.title}>{child.title}</div><div className="content truncate" title={child.content}>{child.content}</div></div><div><img src='./icons/chatListIcon.png' alt="" /></div> </li>
+            <li onClick={() => handleClick(child.url)} key={index} className={index === relatedLists.length - 1 ? "" : 'line'}><div className='relatedListContent'><div className="title truncate" title={child.title}>{child.title}</div><div className="content truncate" title={child.content}>{child.content}</div></div><div><img src={getPublicPath('icons/chatListIcon.png')} alt="" /></div> </li>
         );
         setMessages((prev) => {
             return [
@@ -238,7 +245,7 @@ export default function TodoList() {
                     <div className='mainScroll'>
                         <div className='time enableSelect'>{currentTime}</div>
                         <div className='chatT'>
-                            <img className="chatTImg" src='./icons/chatTIcon.png' alt="" />
+                            <img className="chatTImg" src={getPublicPath('icons/chatTIcon.png')} alt="" />
                             <div className='chatTTitle enableSelect'>{iframeData.chatName}</div>
                             <div className='chatTContent enableSelect'>您好，我是您的{iframeData.titleName}，很高兴为您服务，您可以直接发送产品和问题向我提问~</div>
                         </div>
@@ -260,7 +267,7 @@ export default function TodoList() {
                                         <div className='askAi' key={`user-${index}`}>
                                             <div className='askAiTitle enableSelect'>我</div>
                                             <div className='askAiContent'>{message.content}</div>
-                                            <img className='askAiIcon enableSelect' src="./icons/chatPerson.png" alt="" />
+                                            <img className='askAiIcon enableSelect' src={getPublicPath('icons/chatPerson.png')} alt="" />
                                         </div>
                                     </div>
                                 )
@@ -268,7 +275,7 @@ export default function TodoList() {
                             if (message.role === 'assistant') {
                                 return (
                                     <div className='chatT' key={`assistant-${index}`}>
-                                        <img className="chatTImg enableSelect no-drag" src='./icons/chatTIcon.png' alt="" />
+                                        <img className="chatTImg enableSelect no-drag" src={getPublicPath('icons/chatTIcon.png')} alt="" />
                                         <div className='chatTTitle enableSelect'>{iframeData.chatName}</div>
                                         <div className='chatTContent'>
                                             {typeof message.content === 'string' ?

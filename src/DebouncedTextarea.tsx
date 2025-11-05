@@ -1,6 +1,11 @@
 import React, {useState, useRef, useEffect, KeyboardEvent, JSX} from "react";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import apiRequest from "./request";
+const PUBLIC_URL = process.env.PUBLIC_URL || (process.env.NODE_ENV === 'production' ? '' : '');
+const getPublicPath = (path: string) => {
+  const base = PUBLIC_URL || './';
+  return `${base}${path.startsWith('/') ? path.slice(1) : path}`;
+};
 interface GuessAskPostResponse {
     queries_list: string[];
 }
@@ -133,7 +138,7 @@ const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...prop
                     {...props}
                 />
             </div>
-            <img onClick={submit} className='chatBottomRight' src="./icons/chatBottomSIcon.png" alt=""/>
+            <img onClick={submit} className='chatBottomRight' src={getPublicPath('icons/chatBottomSIcon.png')} alt=""/>
         </div>
     </div>
     );
