@@ -3,8 +3,15 @@ import apiRequest from "./request";
 import Skeleton from '@mui/material/Skeleton';
 const PUBLIC_URL = process.env.PUBLIC_URL || (process.env.NODE_ENV === 'production' ? '' : '');
 const getPublicPath = (path: string) => {
-  const base = PUBLIC_URL || './';
-  return `${base}${path.startsWith('/') ? path.slice(1) : path}`;
+  // 移除路径开头的斜杠
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  // 如果 PUBLIC_URL 为空（生产环境），直接返回相对路径（不带 ./）
+  if (!PUBLIC_URL) {
+    return cleanPath;
+  }
+  // 否则拼接 PUBLIC_URL
+  const base = PUBLIC_URL.endsWith('/') ? PUBLIC_URL.slice(0, -1) : PUBLIC_URL;
+  return `${base}/${cleanPath}`;
 };
 interface GuessAskPostResponse {
     queries_list:string[];

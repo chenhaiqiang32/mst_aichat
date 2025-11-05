@@ -20,8 +20,15 @@ const isIframe = isClient ? window.self !== window.top : false
 // 当 homepage: "." 时，PUBLIC_URL 在生产环境为空，需要使用相对路径
 const PUBLIC_URL = process.env.PUBLIC_URL || (process.env.NODE_ENV === 'production' ? '' : '');
 const getPublicPath = (path: string) => {
-  const base = PUBLIC_URL || './';
-  return `${base}${path.startsWith('/') ? path.slice(1) : path}`;
+  // 移除路径开头的斜杠
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  // 如果 PUBLIC_URL 为空（生产环境），直接返回相对路径（不带 ./）
+  if (!PUBLIC_URL) {
+    return cleanPath;
+  }
+  // 否则拼接 PUBLIC_URL
+  const base = PUBLIC_URL.endsWith('/') ? PUBLIC_URL.slice(0, -1) : PUBLIC_URL;
+  return `${base}/${cleanPath}`;
 };
 let lastTime = ''
 function getCurrentTime() {
