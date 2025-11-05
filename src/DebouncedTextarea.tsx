@@ -133,7 +133,7 @@ const DebouncedTextarea = ({ isLoading,onEnter, delay = 500,sharedState, ...prop
                     {...props}
                 />
             </div>
-            <img onClick={submit} className='chatBottomRight' src="/icons/chatBottomSIcon.png" alt=""/>
+            <img onClick={submit} className='chatBottomRight' src="./icons/chatBottomSIcon.png" alt=""/>
         </div>
     </div>
     );

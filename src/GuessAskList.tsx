@@ -36,7 +36,7 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
                     <div className='guessAskListContent truncate' title={query} >
                         {query}
                     </div>
-                    <img src='/icons/chatListIcon.png' alt="chat icon" className="chat-icon" />
+                    <img src='./icons/chatListIcon.png' alt="chat icon" className="chat-icon" />
                 </li>
             ));
 
@@ -65,17 +65,17 @@ const GuessAskListComponent: React.FC<GuessAskListProps> = ({
         <div className="guessAsk">
             <div className="guessAskTop">
                 <div className="guessAskLeft">
-                    <img src='/icons/chatAnswerIcon.png' alt="" />
+                    <img src='./icons/chatAnswerIcon.png' alt="" />
                     <div className="name enableSelect">猜你想问</div>
                 </div>
                 {!isLoading && <div className="guessAskRight" >
                     <div className="name" onClick={handleRefreshClick}>{'换一换'}</div>
-                    <img src='/icons/chatReset.png' alt="" />
+                    <img src='./icons/chatReset.png' alt="" />
                 </div>}
 
             </div>
 
-            {error && <div className="error-message"><img src='/icons/chatAnswerIcon.png' alt="" /><span>{error}</span></div>}
+            {error && <div className="error-message"><img src='./icons/chatAnswerIcon.png' alt="" /><span>{error}</span></div>}
 
             {isLoading ? (
                 <div className="guessAskList">
