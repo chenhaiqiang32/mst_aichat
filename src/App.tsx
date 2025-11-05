@@ -17,23 +17,11 @@ import { CodeBlock, Img, VideoBlock, AudioBlock, Link, Paragraph, MarkdownButton
 const isClient = typeof window !== 'undefined'
 const isIframe = isClient ? window.self !== window.top : false
 // 在 GitHub Pages 部署时，使用相对路径
-// 动态获取基础路径，支持子路径部署
+// 当 homepage: "." 时，PUBLIC_URL 在生产环境为空，需要使用相对路径
+const PUBLIC_URL = process.env.PUBLIC_URL || (process.env.NODE_ENV === 'production' ? '' : '');
 const getPublicPath = (path: string) => {
-  if (typeof window !== 'undefined') {
-    // 从当前页面路径获取基础路径
-    const pathname = window.location.pathname;
-    // 移除文件名（如 index.html），保留目录路径
-    let basePath = pathname.replace(/\/[^/]*\.html?$/, '').replace(/\/$/, '');
-    // 如果路径不是根路径，添加尾部斜杠
-    const base = basePath ? `${basePath}/` : './';
-    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-    return `${base}${cleanPath}`;
-  }
-  
-  // 构建时或 SSR 回退
-  const buildTimeBase = process.env.PUBLIC_URL || './';
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${buildTimeBase}${cleanPath}`;
+  const base = PUBLIC_URL || './';
+  return `${base}${path.startsWith('/') ? path.slice(1) : path}`;
 };
 let lastTime = ''
 function getCurrentTime() {

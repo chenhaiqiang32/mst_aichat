@@ -1,19 +1,10 @@
 import React, {useState, useRef, useEffect, KeyboardEvent, JSX} from "react";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import apiRequest from "./request";
-// 动态获取基础路径，支持子路径部署
+const PUBLIC_URL = process.env.PUBLIC_URL || (process.env.NODE_ENV === 'production' ? '' : '');
 const getPublicPath = (path: string) => {
-  if (typeof window !== 'undefined') {
-    const pathname = window.location.pathname;
-    let basePath = pathname.replace(/\/[^/]*\.html?$/, '').replace(/\/$/, '');
-    const base = basePath ? `${basePath}/` : './';
-    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-    return `${base}${cleanPath}`;
-  }
-  
-  const buildTimeBase = process.env.PUBLIC_URL || './';
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${buildTimeBase}${cleanPath}`;
+  const base = PUBLIC_URL || './';
+  return `${base}${path.startsWith('/') ? path.slice(1) : path}`;
 };
 interface GuessAskPostResponse {
     queries_list: string[];
