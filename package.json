@@ -2,6 +2,7 @@
   "name": "material-ui-cra-ts",
   "version": "5.0.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",

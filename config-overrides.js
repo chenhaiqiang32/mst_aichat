@@ -4,6 +4,10 @@ module.exports = override(
   // Exclude @fortaine/fetch-event-source from source map processing
   // This prevents errors when source maps reference non-existent source files
   (config) => {
+    // Set publicPath to relative path for GitHub Pages deployment
+    config.output = config.output || {};
+    config.output.publicPath = './';
+    
     // Find and modify source-map-loader rules to exclude the problematic package
     if (config.module && config.module.rules) {
       config.module.rules.forEach(rule => {
