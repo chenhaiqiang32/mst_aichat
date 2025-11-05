@@ -117,12 +117,14 @@ export default function TodoList() {
         return () => { lastTime }
     }, [])
     useEffect(() => {
-        if (!isIframe) return
+        // 从 URL 参数获取配置，如果没有则使用默认值
         const urlParams = new URLSearchParams(window.location.search);
         const apiUrl = urlParams.get("apiUrl");
         const titleName = urlParams.get("titleName");
         const chatName = urlParams.get("chatName");
         const projectId = urlParams.get("projectId");
+        
+        // 初始化应用（无论是否在 iframe 中）
         setIframeToDom(
             {
                 chatName: chatName || "小T", // 默认小T

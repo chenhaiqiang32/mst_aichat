@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>优雅设计 | 首页</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* 导航栏 */
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #3a86ff;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-left: 30px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #3a86ff;
+    }
+
+    /* 英雄区域 */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      text-align: center;
+      padding-top: 60px;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #2b2d42;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #3a86ff;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 0 10px;
+    }
+
+    .btn:hover {
+      background-color: #2667ff;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn.secondary {
+      background-color: transparent;
+      border: 2px solid #3a86ff;
+      color: #3a86ff;
+    }
+
+    .btn.secondary:hover {
+      background-color: #3a86ff;
+      color: white;
+    }
+
+    /* 特点部分 */
+    .features {
+      padding: 100px 0;
+      background-color: #fff;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 36px;
+      color: #2b2d42;
+      margin-bottom: 20px;
+    }
+
+    .section-title p {
+      color: #555;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .feature-item {
+      flex-basis: calc(33.333% - 40px);
+      text-align: center;
+      padding: 40px 30px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      margin-bottom: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      color: #3a86ff;
+      margin-bottom: 20px;
+    }
+
+    .feature-item h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #2b2d42;
+    }
+
+    .feature-item p {
+      color: #555;
+    }
+
+    /* 项目展示 */
+    .projects {
+      padding: 100px 0;
+      background-color: #f8f9fa;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 30px;
+    }
+
+    .project-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      height: 300px;
+    }
+
+    .project-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .project-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .project-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .project-item:hover .project-overlay {
+      transform: translateY(0);
+    }
+
+    .project-overlay h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .project-overlay p {
+      margin-bottom: 15px;
+    }
+
+    /* 团队部分 */
+    .team {
+      padding: 100px 0;
+      background-color: #fff;
+    }
+
+    .team-grid {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .team-member {
+      flex-basis: calc(25% - 30px);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .team-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .team-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-member h3 {
+      font-size: 22px;
+      margin-bottom: 5px;
+      color: #2b2d42;
+    }
+
+    .team-member p {
+      color: #3a86ff;
+      margin-bottom: 15px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 0 5px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: #f8f9fa;
+      color: #555;
+      line-height: 36px;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background-color: #3a86ff;
+      color: white;
+    }
+
+    /* 联系部分 */
+    .contact {
+      padding: 100px 0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .contact-grid {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .contact-info {
+      flex-basis: 40%;
+    }
+
+    .contact-form {
+      flex-basis: 55%;
+    }
+
+    .contact-item {
+      margin-bottom: 30px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      margin-right: 15px;
+      font-size: 24px;
+      color: #3a86ff;
+    }
+
+    .contact-text h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #2b2d42;
+    }
+
+    .contact-text p {
+      color: #555;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: white;
+    }
+
+    textarea.form-control {
+      height: 150px;
+      resize: none;
+    }
+
+    /* 页脚 */
+    footer {
+      background-color: #2b2d42;
+      color: white;
+      padding: 60px 0 30px;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .footer-col {
+      flex-basis: 23%;
+    }
+
+    .footer-col h3 {
+      font-size: 20px;
+      margin-bottom: 25px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-col h3:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background-color: #3a86ff;
+    }
+
+    .footer-col p {
+      margin-bottom: 15px;
+      color: #aaa;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: #aaa;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #3a86ff;
+      padding-left: 5px;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 992px) {
+      .feature-item {
+        flex-basis: calc(50% - 30px);
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-member {
+        flex-basis: calc(50% - 20px);
+      }
+
+      .contact-grid {
+        flex-direction: column;
+      }
+
+      .contact-info,
+      .contact-form {
+        flex-basis: 100%;
+      }
+
+      .contact-info {
+        margin-bottom: 50px;
+      }
+
+      .footer-grid {
+        flex-wrap: wrap;
+      }
+
+      .footer-col {
+        flex-basis: 48%;
+        margin-bottom: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .feature-item {
+        flex-basis: 100%;
+      }
+
+      .team-member {
+        flex-basis: 100%;
+      }
+
+      .footer-col {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">优雅设计</div>
+        <ul class="nav-links">
+          <li><a href="#home">首页</a></li>
+          <li><a href="#features">特色</a></li>
+          <li><a href="#projects">项目</a></li>
+          <li><a href="#team">团队</a></li>
+          <li><a href="#contact">联系我们</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-content">
+        <h1>创造非凡的设计体验</h1>
+        <p>我们致力于打造简洁、优雅且实用的设计解决方案，帮助客户实现品牌价值最大化</p>
+        <div class="hero-buttons">
+          <a href="#contact" class="btn">联系我们</a>
+          <a href="#projects" class="btn secondary">查看作品</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特点部分 -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>我们的优势</h2>
+        <p>融合创意与技术，为您提供全方位的设计服务</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-pencil-ruler"></i>
+          </div>
+          <h3>专业设计</h3>
+          <p>我们拥有专业的设计团队，注重细节，精益求精，为您打造独特的视觉体验。</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>响应式布局</h3>
+          <p>所有设计都兼容各种设备，无论是电脑、平板还是手机，都能提供完美的用户体验。</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <h3>高效开发</h3>
+          <p>采用先进的开发技术和工具，高效完成项目，确保按时交付高质量的成果。</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3>贴心服务</h3>
+          <p>提供全程一对一的沟通服务，及时响应客户需求，确保项目顺利进行。</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>数据分析</h3>
+          <p>基于数据分析，优化设计方案，提升用户体验和转化率。</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>安全可靠</h3>
+          <p>注重系统安全，采用先进的安全防护措施，确保数据安全和业务连续性。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 项目展示 -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-title">
+        <h2>精选案例</h2>
+        <p>展示我们为各行业客户提供的创新设计解决方案</p>
+      </div>
+      <div class="projects-grid">
+        <div class="project-item">
+          <img src="https://source.unsplash.com/random/600x400?website" alt="项目1">
+          <div class="project-overlay">
+            <h3>企业官网设计</h3>
+            <p>为科技公司打造现代化的品牌形象和用户体验。</p>
+            <a href="#" class="btn">查看详情</a>
+          </div>
+        </div>
+        <div class="project-item">
+          <img src="https://source.unsplash.com/random/600x400?app" alt="项目2">
+          <div class="project-overlay">
+            <h3>移动应用设计</h3>
+            <p>创新的移动应用界面设计，提升用户参与度和满意度。</p>
+            <a href="#" class="btn">查看详情</a>
+          </div>
+        </div>
+        <div class="project-item">
+          <img src="https://source.unsplash.com/random/600x400?ecommerce" alt="项目3">
+          <div class="project-overlay">
+            <h3>电商平台设计</h3>
+            <p>优化购物体验，提高转化率的电子商务解决方案。</p>
+            <a href="#" class="btn">查看详情</a>
+          </div>
+        </div>
+        <div class="project-item">
+          <img src="https://source.unsplash.com/random/600x400?brand" alt="项目4">
+          <div class="project-overlay">
+            <h3>品牌形象设计</h3>
+            <p>全方位的品牌视觉识别系统，塑造独特的品牌形象。</p>
+            <a href="#" class="btn">查看详情</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 团队部分 -->
+  <section class="team" id="team">
+    <div class="container">
+      <div class="section-title">
+        <h2>我们的团队</h2>
+        <p>由经验丰富的专业人士组成，致力于为客户创造最大价值</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="team-photo">
+            <img src="https://source.unsplash.com/random/200x200?person1" alt="团队成员1">
+          </div>
+          <h3>张明</h3>
+          <p>创意总监</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-behance"></i></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <div class="team-photo">
+            <img src="https://source.unsplash.com/random/200x200?person2" alt="团队成员2">
+          </div>
+          <h3>李华</h3>
+          <p>UI/UX设计师</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-behance"></i></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <div class="team-photo">
+            <img src="https://source.unsplash.com/random/200x200?person3" alt="团队成员3">
+          </div>
+          <h3>王强</h3>
+          <p>前端开发</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="team-member">
+          <div class="team-photo">
+            <img src="https://source.unsplash.com/random/200x200?person4" alt="团队成员4">
+          </div>
+          <h3>陈燕</h3>
+          <p>项目经理</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系部分 -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>联系我们</h2>
+        <p>期待与您合作，共创精彩</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">
+              <h3>地址</h3>
+              <p>中国上海市浦东新区张江高科技园区</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-text">
+              <h3>电话</h3>
+              <p>+86 021-12345678</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">
+              <h3>邮箱</h3>
+              <p>contact@elegantdesign.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="contact-text">
+              <h3>工作时间</h3>
+              <p>周一至周五: 9:00 - 18:00</p>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="您的姓名" required>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="您的邮箱" required>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="主题">
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" placeholder="您的留言" required></textarea>
+            </div>
+            <button type="submit" class="btn">发送留言</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo">优雅设计</div>
+          <p>我们致力于打造简洁、优雅且实用的设计解决方案，帮助客户实现品牌价值最大化。</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>服务</h3>
+          <ul class="footer-links">
+            <li><a href="#">网站设计</a></li>
+            <li><a href="#">移动应用开发</a></li>
+            <li><a href="#">用户体验设计</a></li>
+            <li><a href="#">品牌形象设计</a></li>
+            <li><a href="#">数字营销</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>快速链接</h3>
+          <ul class="footer-links">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#features">特色</a></li>
+            <li><a href="#projects">项目</a></li>
+            <li><a href="#team">团队</a></li>
+            <li><a href="#contact">联系我们</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>订阅</h3>
+          <p>订阅我们的通讯，获取最新的设计资讯和优惠信息。</p>
+          <form>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="您的邮箱" required>
+            </div>
+            <button type="submit" class="btn">订阅</button>
+          </form>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 优雅设计. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 平滑滚动效果
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+
+  <script>
+    window.difyChatbotConfig = {
+      iframeUrl: 'https://ragsite.teamhelper.cn',
+      // iframeUrl: 'http://localhost:3000',
+      apiUrl: '',
+      titleName: '',
+      chatName: '',
+      projectId: '',
+    }
+  </script>
+  <!-- <script src="http://localhost:3000/embed.js" charset="UTF-8" defer></script> -->
+  <script src="https://ragsite.teamhelper.cn/embed.js" charset="UTF-8" defer></script>
+  </scrip>
+</body>
+
+</html>

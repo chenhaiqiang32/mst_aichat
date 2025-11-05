@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmaterial_ui_cra_ts=self.webpackChunkmaterial_ui_cra_ts||[]).push([[372],{7372:(e,a,r)=>{r.d(a,{createInfoServices:()=>s.v});var s=r(9456);r(1584)}}]);
